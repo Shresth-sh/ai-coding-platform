@@ -3,7 +3,7 @@ function runCode() {
 
   document.getElementById('output').innerText = "Running...";
 
-  fetch('REPLACE_BACKEND_URL/run', {
+  fetch('https://ai-coding-platform-1-rysm.onrender.com//run', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({ code })

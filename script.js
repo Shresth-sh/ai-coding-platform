@@ -1,19 +1,25 @@
 function runCode() {
-  const code = document.getElementById('code').value;
+  const code = document.getElementById("code").value;
+  const outputElement = document.getElementById("output");
 
-  document.getElementById('output').innerText = "Running...";
+  try {
+    // Capture console.log output
+    let consoleOutput = "";
+    const originalLog = console.log;
+    
+    console.log = function (...args) {
+      consoleOutput += args.join(" ") + "\n";
+      originalLog.apply(console, args);
+    };
 
-  fetch('https://ai-coding-platform-po3p.onrender.com///run', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ code })
-  })
-  .then(res => res.json())
-  .then(data => {
-    document.getElementById('output').innerText = data.output;
-  })
-  .catch(err => {
-    document.getElementById('output').innerText = "❌ Error connecting to backend: " + err;
-  });
+    // Execute the user code
+    eval(code);
+
+    // Restore console.log
+    console.log = originalLog;
+
+    outputElement.textContent = consoleOutput || "No output";
+  } catch (err) {
+    outputElement.textContent = "Error: " + err.message;
+  }
 }
-
